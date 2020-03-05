@@ -36,7 +36,7 @@ delay2:
 	
 .global delay1ms 	; void delay1ms ( unsigned n )
 delay1ms:
-	mov r26, r24
+	movw r26, r24
 	rjmp delay4
 delay3:
 	nop2

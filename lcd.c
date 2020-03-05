@@ -8,31 +8,6 @@
 #include "lcd.h"
 #include "delay.h"
 
-/*
-#define CTRL_DDR DDRD
-#define CTRL_PORT PORTD
-#define RS (1<<PD6)
-#define ENABLE (1<<PD7)
-
-#define DATA_DDR DDRB
-#define DATA_PORT PORTB
-#define DB4 (1<<PB0)
-#define DB5 (1<<PB1)
-#define DB6 (1<<PB2)
-#define DB7 (1<<PB3)
-
-
-#define CTRL_DDR DDRD
-#define CTRL_PORT PORTD
-
-#define DATA_DDR DDRB
-#define DATA_PORT PORTB
-
-
-volatile uint8_t *CTRL_DDR;
-volatile uint8_t *CTRL_PORT;
-*/
-
 uint8_t *RS_PORT;
 uint8_t *RS_DDR;
 uint8_t RS;
@@ -129,32 +104,6 @@ void lcdInit(uint8_t rs, uint8_t enable, uint8_t db4, uint8_t db5, uint8_t db6, 
   DB7_DDR = findDDRForPin(db7);
   DB7_PORT = findPORTForPin(db7);
   DB7 = findPinByteValue(db7);
-  /*
-  
-  RS_DDR = &DDRD;
-  RS_PORT = &PORTD;
-  RS = 1<<6;
-
-  EN_DDR = &DDRD;
-  EN_PORT = &PORTD;
-  ENABLE = 1<<7;
-
-  DB4_DDR = &DDRB;
-  DB4_PORT = &PORTB;
-  DB4 = 1<<0;
-
-  DB5_DDR = &DDRB;
-  DB5_PORT = &PORTB;
-  DB5 = 1<<1;
-
-  DB6_DDR = &DDRB;
-  DB6_PORT = &PORTB;
-  DB6 = 1<<2;
-
-  DB7_DDR = &DDRB;
-  DB7_PORT = &PORTB;
-  DB7 = 1<<3;
-  */
   
   // Set all pins as outputs.
   *RS_DDR |= RS;
@@ -245,19 +194,46 @@ void command( uint8_t cmd ) {
 /*
   Writes cmd to LCD Panel as data
 */
-void data( uint8_t c ) {
+void lcdPutc( uint8_t c ) {
   *RS_PORT |= RS; // RS pin is high for data
   write4bits( c>>4 );
   write4bits( c );
 }
 
 void lcdPuts( unsigned char *s ) {
-  while( *s ) data( *s++ );
+  while( *s ) lcdPutc( *s++ );
+}
+
+void lcdClear() {
+  command(0x01);
+  delay1ms(2);
+}
+
+void lcdHome() {
+  command(0x02);
+  delay1ms(2);
+}
+
+void lcdCursorOn() {
+  command(0x0f);
+  delay1ms(1);
+}
+
+void lcdCursorOff() {
+  command(0x0c);
+  delay1ms(1);
 }
 
 
 void main( void ) {
   lcdInit(12, 13, 14, 15, 16, 17);
-  lcdPuts("big hairy balls or something"  );
+  lcdCursorOn();
+  lcdPuts("Aloha, World!");
+  delay1ms(2000);
+  
+  lcdHome();
+  lcdPutc('W');
+  lcdCursorOff();
+  
   while( 1 ) ;
 }
