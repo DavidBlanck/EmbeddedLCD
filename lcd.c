@@ -215,7 +215,7 @@ void lcdHome() {
 }
 
 void lcdCursorOn() {
-  command(0x0f);
+  command(0x0e);
   delay1ms(1);
 }
 
