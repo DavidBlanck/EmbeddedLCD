@@ -7,14 +7,17 @@ delay.o: delay.S
 lcd.o: lcd.c delay.h
 	avr-gcc -mmcu=atmega328p -c lcd.c -o lcd.o
 
-lcd.elf: lcd.o delay.o
-	avr-gcc -mmcu=atmega328p lcd.o delay.o -o lcd.elf
+main.o: main.c lcd.h delay.h
+	avr-gcc -mmcu=atmega328p -c main.c -o main.o
 
-lcd.hex: lcd.elf
-	avr-objcopy -j .text -j .data -O ihex lcd.elf lcd.hex
+main.elf: main.o lcd.o delay.o
+	avr-gcc -mmcu=atmega328p main.o lcd.o delay.o -o main.elf
 
-make install: lcd.hex
-	avrdude -p atmega328p -c usbtiny -U flash:w:lcd.hex:i
+main.hex: main.elf
+	avr-objcopy -j .text -j .data -O ihex main.elf main.hex
+
+make install: main.hex
+	avrdude -p atmega328p -c usbtiny -U flash:w:main.hex:i
 
 clean:
 	rm -f *.o *.elf *.hex *.lst*

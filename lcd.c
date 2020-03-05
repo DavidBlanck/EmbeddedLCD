@@ -1,4 +1,4 @@
-/* David Blanck
+/* David Blanck & Carl Yarwood
    lcd.c
    Implements functions for writing data to an LCD panel
 */
@@ -225,15 +225,4 @@ void lcdCursorOff() {
 }
 
 
-void main( void ) {
-  lcdInit(12, 13, 14, 15, 16, 17);
-  lcdCursorOn();
-  lcdPuts("Aloha, World!");
-  delay1ms(2000);
-  
-  lcdHome();
-  lcdPutc('W');
-  lcdCursorOff();
-  
-  while( 1 ) ;
-}
+
