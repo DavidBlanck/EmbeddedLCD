@@ -1,4 +1,4 @@
-/* David Blanck
+/* David Blanck & Carl Yarwood
    delay.h
 */
 

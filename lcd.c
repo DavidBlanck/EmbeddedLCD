@@ -1,6 +1,6 @@
 /* David Blanck & Carl Yarwood
    lcd.c
-   Implements functions for writing data to an LCD panel
+   Implements functions for initializing and writing data to an LCD panel
 */
 
 
